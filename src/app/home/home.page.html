@@ -1,0 +1,96 @@
+<ion-header [translucent]="false">
+  <ion-toolbar color="dark">
+    <ion-title align="center">
+      Lista de tareas por hacer
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+
+  <form [formGroup]="tareasForm" (ngSubmit)="CreateRecord()">
+
+    <ion-item>
+      <ion-label position="floating">Tarea</ion-label>
+      <ion-input formControlName="Nombre"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Duración</ion-label>
+      <ion-input formControlName="Duracion"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Comentario</ion-label>
+      <ion-input multiLine="true" formControlName="Comentario"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-button (click)="CreateRecord()" color="success" [disabled]="tareasForm.invalid">
+        <ion-icon size="small" slot="icon-only" name="add"></ion-icon>
+        &nbsp;Agregar tarea
+      </ion-button>
+    </ion-item>
+
+  </form>
+
+
+  <ion-card *ngFor="let item of tareasListado" color="primary">
+    <span *ngIf="!item.isEdit; else elseBlock">
+      <ion-card-header>
+        <ion-card-title>{{item.Nombre}}</ion-card-title>
+        <ion-card-subtitle>Duración: {{item.Duracion}}</ion-card-subtitle>
+        <ion-card-subtitle>Comentario: {{item.Comentario}}</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+
+        <ion-button shape="round" color="secondary" size="small" (click)="EditRecord(item)">
+          <ion-icon size="small" slot="icon-only" name="create"></ion-icon>
+
+        </ion-button>
+        <ion-button shape="round" color="danger" size="small" (click)="RemoveRecord(item.id)">
+          <ion-icon size="small" slot="icon-only" name="trash"></ion-icon>
+
+        </ion-button>
+      </ion-card-content>
+    </span>
+    <ng-template #elseBlock>
+      <ion-card-header>
+        <ion-card-title>
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                Edición de tareas
+              </ion-col>
+              <ion-col>
+                <ion-button fill="solid" color="medium" size="small" (click)="item.isEdit = false">
+                  Cancelar
+                </ion-button>
+              </ion-col>
+              <ion-col>
+                <ion-button fill="solid" color="success" size="small" (click)="UpdateRecord(item)">
+                  Actualizar
+                </ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-label><strong>Tarea</strong></ion-label>
+          <ion-input type="text" [(ngModel)]="item.EditName"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label><strong>Duracion</strong></ion-label>
+          <ion-input type="text" [(ngModel)]="item.EditDuracion"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label><strong>Comentario</strong></ion-label>
+          <ion-input type="text" [(ngModel)]="item.EditComentario"></ion-input>
+        </ion-item>
+      </ion-card-content>
+    </ng-template>
+  </ion-card>
+
+</ion-content>
